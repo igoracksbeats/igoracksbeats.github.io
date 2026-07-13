@@ -6,15 +6,17 @@ box-sizing:border-box;
 
 }
 
+html{
+
+scroll-behavior:smooth;
+
+}
+
 body{
 
 background:#090909;
 color:white;
-
-font-family:
-Inter,
-Arial,
-sans-serif;
+font-family:Inter,sans-serif;
 
 overflow-x:hidden;
 
@@ -27,12 +29,12 @@ inset:0;
 
 pointer-events:none;
 
-opacity:.025;
+opacity:.02;
 
 background-image:
 radial-gradient(#fff 1px,transparent 1px);
 
-background-size:7px 7px;
+background-size:8px 8px;
 
 }
 
@@ -50,21 +52,23 @@ align-items:center;
 
 text-align:center;
 
+padding:40px;
+
 }
 
 .logo{
 
-font-size:clamp(70px,11vw,150px);
+font-size:clamp(72px,10vw,150px);
 
-font-weight:900;
+font-weight:800;
 
 letter-spacing:-5px;
 
-color:white;
-
 text-decoration:none;
 
-transition:.35s;
+color:white;
+
+transition:.3s;
 
 }
 
@@ -76,104 +80,100 @@ opacity:.6;
 
 header p{
 
-margin-top:22px;
+margin-top:20px;
 
-font-size:22px;
+color:#8a8a8a;
 
-color:#777;
+font-size:24px;
+
+line-height:1.7;
+
+}
+
+.socials{
+
+display:flex;
+
+gap:28px;
+
+margin-top:60px;
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+}
+
+.socials a{
+
+color:white;
+
+font-size:34px;
+
+transition:.3s;
+
+}
+
+.socials a:hover{
+
+transform:translateY(-5px) scale(1.15);
+
+opacity:.7;
 
 }
 
 section{
 
-max-width:950px;
+max-width:1100px;
 
 margin:auto;
 
-padding:140px 30px;
+padding:80px 30px;
 
 }
 
-.available{
+iframe{
 
-display:flex;
-
-flex-direction:column;
-
-gap:40px;
+border-radius:22px;
 
 }
 
-.available div{
+.about{
 
-font-size:clamp(42px,7vw,82px);
-
-font-weight:700;
-
-border-bottom:1px solid #222;
-
-padding-bottom:20px;
-
-transition:.3s;
-
-cursor:default;
+max-width:760px;
 
 }
 
-.available div:hover{
+.about p{
 
-padding-left:25px;
+font-size:26px;
 
-color:white;
+line-height:1.8;
 
-}
-
-.contact{
-
-display:flex;
-
-flex-direction:column;
-
-gap:28px;
-
-}
-
-.contact h2{
-
-font-size:60px;
-
-margin-bottom:25px;
-
-}
-
-.contact a{
-
-text-decoration:none;
-
-font-size:34px;
-
-color:#7e7e7e;
-
-transition:.25s;
-
-width:max-content;
-
-}
-
-.contact a:hover{
-
-color:white;
-
-padding-left:14px;
+color:#cfcfcf;
 
 }
 
 footer{
 
-padding:90px;
+padding:80px;
 
 text-align:center;
 
-color:#555;
+}
+
+footer a{
+
+text-decoration:none;
+
+color:#666;
+
+transition:.3s;
+
+}
+
+footer a:hover{
+
+color:white;
 
 }
