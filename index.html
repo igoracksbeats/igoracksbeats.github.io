@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IgoRacks</title>
 
-<title>IgoRacks</title>
+    <link rel="stylesheet" href="style.css">
 
-<link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
@@ -27,78 +24,161 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <header id="top">
 
-<a href="#top" class="logo">
+    <a href="#top" class="logo">
+        IgoRacks
+    </a>
 
-IgoRacks
+    <p class="subtitle">
+        Hip-Hop Producer · Artist · Mix Engineer
+    </p>
 
-</a>
+    <div class="socials">
 
-<p>
+        <a href="https://open.spotify.com/artist/74ZzK035XeXN4eh4vNsLd8?si=PR6vhwCAR2qcg_WGzQOjGQ" target="_blank">
+            <i class="fab fa-spotify"></i>
+        </a>
 
-Hip-Hop Producer · Artist · Mix Engineer
+        <a href="https://www.youtube.com/@igoracksbeats" target="_blank">
+            <i class="fab fa-youtube"></i>
+        </a>
 
-</p>
+        <a href="https://instagram.com/igoracksbeats" target="_blank">
+            <i class="fab fa-instagram"></i>
+        </a>
 
-<div class="socials">
+        <a href="https://t.me/igoracks" target="_blank">
+            <i class="fab fa-telegram"></i>
+        </a>
 
-<a href="https://open.spotify.com/artist/74ZzK035XeXN4eh4vNsLd8?si=PR6vhwCAR2qcg_WGzQOjGQ" target="_blank">
-<i class="fab fa-spotify"></i>
-</a>
+        <a href="https://wa.me/79996351902?text=Let's work!" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
 
-<a href="https://soundcloud.com/igoracks-beats" target="_blank">
-<i class="fab fa-soundcloud"></i>
-</a>
-
-<a href="https://www.youtube.com/@igoracksbeats" target="_blank">
-<i class="fab fa-youtube"></i>
-</a>
-
-<a href="https://instagram.com/igoracksbeats" target="_blank">
-<i class="fab fa-instagram"></i>
-</a>
-
-<a href="https://t.me/igoracks" target="_blank">
-<i class="fab fa-telegram"></i>
-</a>
-
-<a href="https://wa.me/79996351902?text=Let's work!" target="_blank">
-<i class="fab fa-whatsapp"></i>
-</a>
-
-</div>
+    </div>
 
 </header>
 
-<section class="about">
+<section class="beats">
 
-<p>
+    <div class="beat">
 
-I produce dark trap built around cinematic textures and classical influences.
+        <div class="beat-info">
 
-Available for original beats, track reproductions, mixing, mastering and full-song production.
+            <div>
 
-From the first idea to the final master - every stage, one producer.
+                <h2>GOAT BELL</h2>
 
-</p>
+                <span>143 BPM • C Minor</span>
 
-</section>
+            </div>
 
-<section>
+            <button class="play-btn">
 
-<iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2257527929&color=%23101414&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/igoracks-beats" title="IgoRacks Beats" target="_blank" style="color: #cccccc; text-decoration: none;">IgoRacks Beats</a> · <a href="https://soundcloud.com/igoracks-beats/sets/beat-heaven-pack-vol-1" title="BEAT HEAVEN PACK - Vol. 1" target="_blank" style="color: #cccccc; text-decoration: none;">BEAT HEAVEN PACK - Vol. 1</a></div>
+                <i class="fas fa-play"></i>
+
+            </button>
+
+        </div>
+
+        <input class="progress" type="range" value="0" min="0" max="100">
+
+        <div class="time">
+
+            <span class="current">0:00</span>
+
+            <span class="duration">0:00</span>
+
+        </div>
+
+        <audio src="audio/goat-bell.mp3"></audio>
+
+    </div>
+
+
+
+    <div class="beat">
+
+        <div class="beat-info">
+
+            <div>
+
+                <h2>NIGHTMARE</h2>
+
+                <span>148 BPM • A Minor</span>
+
+            </div>
+
+            <button class="play-btn">
+
+                <i class="fas fa-play"></i>
+
+            </button>
+
+        </div>
+
+        <input class="progress" type="range" value="0" min="0" max="100">
+
+        <div class="time">
+
+            <span class="current">0:00</span>
+
+            <span class="duration">0:00</span>
+
+        </div>
+
+        <audio src="audio/nightmare.mp3"></audio>
+
+    </div>
+
+
+
+    <div class="beat">
+
+        <div class="beat-info">
+
+            <div>
+
+                <h2>PEW</h2>
+
+                <span>150 BPM • F# Minor</span>
+
+            </div>
+
+            <button class="play-btn">
+
+                <i class="fas fa-play"></i>
+
+            </button>
+
+        </div>
+
+        <input class="progress" type="range" value="0" min="0" max="100">
+
+        <div class="time">
+
+            <span class="current">0:00</span>
+
+            <span class="duration">0:00</span>
+
+        </div>
+
+        <audio src="audio/pew.mp3"></audio>
+
+    </div>
 
 </section>
 
 <footer>
 
-<a href="#top">
+    <a href="#top">
 
-© IgoRacks 2026
+        © IgoRacks 2026
 
-</a>
+    </a>
 
 </footer>
 
-</body>
+<script src="script.js"></script>
 
+</body>
 </html>
