@@ -12,10 +12,8 @@ const seek = document.getElementById("seek");
 const currentTime = document.getElementById("time-current");
 const totalTime = document.getElementById("time-total");
 
-
 const prev = document.getElementById("prev");
 const next = document.getElementById("next");
-
 
 
 let currentTrack = 0;
@@ -26,39 +24,43 @@ function formatTime(seconds) {
 
     if (isNaN(seconds)) return "0:00";
 
-    let min = Math.floor(seconds / 60);
+    const minutes = Math.floor(seconds / 60);
 
-    let sec = Math.floor(seconds % 60);
+    let secondsLeft = Math.floor(seconds % 60);
 
-    if (sec < 10) sec = "0" + sec;
+    if (secondsLeft < 10) {
+        secondsLeft = "0" + secondsLeft;
+    }
 
-    return `${min}:${sec}`;
+    return `${minutes}:${secondsLeft}`;
 
 }
 
 
 
 
-function loadTrack(index) {
 
+function loadTrack(index) {
 
     const track = tracks[index];
 
-
     currentTrack = index;
 
-
     audio.src = track.dataset.src;
-
 
     title.textContent = track.dataset.title;
 
     info.textContent = track.dataset.info;
 
 
-    tracks.forEach(t => {
+    tracks.forEach(item => {
+        item.classList.remove("active");
 
-        t.classList.remove("active");
+        const icon = item.querySelector(".play-btn i");
+
+        if(icon){
+            icon.className = "fas fa-play";
+        }
 
     });
 
@@ -72,63 +74,111 @@ function loadTrack(index) {
 
 
 
+
 function playTrack() {
 
-
     audio.play();
-
 
     mainPlay.innerHTML =
     '<i class="fas fa-pause"></i>';
 
 
+    const activeButton =
+    tracks[currentTrack].querySelector(".play-btn i");
+
+
+    if(activeButton){
+        activeButton.className = "fas fa-pause";
+    }
+
 }
 
 
 
 
-function pauseTrack(){
 
+
+function pauseTrack() {
 
     audio.pause();
-
 
     mainPlay.innerHTML =
     '<i class="fas fa-play"></i>';
 
 
+    const activeButton =
+    tracks[currentTrack].querySelector(".play-btn i");
+
+
+    if(activeButton){
+        activeButton.className = "fas fa-play";
+    }
+
 }
+
+
 
 
 
 
 tracks.forEach((track,index)=>{
 
+
     const button = track.querySelector(".play-btn");
 
 
-    button.addEventListener("click",(e)=>{
+    button.addEventListener("click",(event)=>{
 
-        e.preventDefault();
 
-        loadTrack(index);
+        event.stopPropagation();
 
-        playTrack();
+
+        if(currentTrack !== index || !audio.src){
+
+
+            loadTrack(index);
+
+            playTrack();
+
+
+        } else {
+
+
+            if(audio.paused){
+
+                playTrack();
+
+            } else {
+
+                pauseTrack();
+
+            }
+
+        }
 
 
     });
+
+
+
 
 
     track.addEventListener("click",()=>{
 
+
         loadTrack(index);
 
         playTrack();
 
+
     });
 
 
+
 });
+
+
+
 
 
 
@@ -144,22 +194,19 @@ mainPlay.addEventListener("click",()=>{
     }
 
 
-
     if(audio.paused){
 
         playTrack();
 
-    }
-
-    else{
+    } else {
 
         pauseTrack();
 
     }
 
 
-
 });
+
 
 
 
@@ -196,6 +243,7 @@ audio.addEventListener("timeupdate",()=>{
 
 
 
+
 seek.addEventListener("input",()=>{
 
 
@@ -210,19 +258,6 @@ seek.addEventListener("input",()=>{
 
 
 });
-
-
-
-
-
-
-
-
-
-});
-
-
-
 
 
 
@@ -250,6 +285,7 @@ next.addEventListener("click",()=>{
 
 
 });
+
 
 
 
