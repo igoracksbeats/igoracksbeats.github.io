@@ -677,3 +677,165 @@ header {
 
 
 }
+
+
+
+/* ===== BEAT CARD V2 ===== */
+
+
+.beat {
+
+    display:flex;
+    gap:25px;
+    align-items:flex-start;
+
+}
+
+
+.beat-number {
+
+    font-size:52px;
+    font-weight:800;
+    color:#292929;
+    line-height:1;
+    min-width:70px;
+
+}
+
+
+
+.beat-content {
+
+    flex:1;
+
+}
+
+
+
+.tags {
+
+    display:flex;
+    gap:8px;
+    margin-top:15px;
+    flex-wrap:wrap;
+
+}
+
+
+
+.tags span {
+
+    border:1px solid #333;
+
+    padding:5px 12px;
+
+    border-radius:30px;
+
+    font-size:11px;
+
+    color:#999;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+}
+
+
+
+.waveform {
+
+    height:45px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    margin-top:25px;
+
+    opacity:.5;
+
+}
+
+
+
+.waveform span {
+
+    width:4px;
+
+    height:18px;
+
+    background:#777;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+
+
+.waveform span:nth-child(2),
+.waveform span:nth-child(5),
+.waveform span:nth-child(8),
+.waveform span:nth-child(12) {
+
+    height:35px;
+
+}
+
+
+
+.beat.active .waveform span {
+
+    background:#fff;
+
+    animation:pulse .8s infinite alternate;
+
+}
+
+
+
+@keyframes pulse {
+
+    from {
+
+        transform:scaleY(.5);
+
+    }
+
+
+    to {
+
+        transform:scaleY(1);
+
+    }
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.beat {
+
+    gap:15px;
+
+}
+
+
+
+.beat-number {
+
+    font-size:34px;
+
+    min-width:45px;
+
+}
+
+
+
+}
