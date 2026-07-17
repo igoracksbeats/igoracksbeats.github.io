@@ -161,9 +161,9 @@ header {
 
 .beat-content {
 
-    display:flex;
+
     width:100%;
-    align-items:center;
+    
 
 }
 
@@ -192,6 +192,7 @@ header {
     align-items:center;
 
 }
+
 
 
 
@@ -248,27 +249,7 @@ header {
 
 .play-btn {
 
-    width:43px;
-
-    height:43px;
-
-    border-radius:50%;
-
-    background:white;
-
-    color:black;
-
-    border:none;
-
-    cursor:pointer;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    transition:.2s;
+    flex-shrink:0;
 
 }
 
