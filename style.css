@@ -308,7 +308,7 @@ header {
 
     width:3px;
 
-    height:15px;
+    height:10px;
 
     background:#333;
 
@@ -318,7 +318,7 @@ header {
 
 .waveform span:nth-child(2n) {
 
-    height:15px;
+    height:10px;
 
 }
 
@@ -326,7 +326,7 @@ header {
 
 .waveform span:nth-child(3n) {
 
-    height:10px;
+    height:5px;
 
 }
 
