@@ -162,10 +162,8 @@ header {
 .beat-content {
 
     display:flex;
-
-    flex-direction:column;
-
     width:100%;
+    align-items:center;
 
 }
 
@@ -189,9 +187,9 @@ header {
 
     display:flex;
 
-    justify-content:space-between;
-
     align-items:center;
+
+    flex:1;
 
 }
 
