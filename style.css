@@ -586,39 +586,6 @@ header {
 
 
 
-.volume {
-
-
-    display:flex;
-
-
-    align-items:center;
-
-
-    gap:12px;
-
-
-    margin-top:15px;
-
-
-    color:#777;
-
-
-}
-
-
-
-.volume input {
-
-
-    flex:1;
-
-
-}
-
-
-
-
 
 
 input[type="range"] {
