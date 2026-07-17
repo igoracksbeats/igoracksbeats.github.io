@@ -1,90 +1,333 @@
-const beats = document.querySelectorAll(".beat");
+const audio = document.getElementById("audio");
 
-let currentAudio = null;
-let currentButton = null;
+const tracks = document.querySelectorAll(".beat");
 
-beats.forEach((beat) => {
+const mainPlay = document.getElementById("main-play");
 
-    const audio = beat.querySelector("audio");
-    const button = beat.querySelector(".play-btn");
-    const icon = button.querySelector("i");
+const title = document.getElementById("current-title");
+const info = document.getElementById("current-info");
 
-    const progress = beat.querySelector(".progress");
+const seek = document.getElementById("seek");
 
-    const current = beat.querySelector(".current");
-    const duration = beat.querySelector(".duration");
+const currentTime = document.getElementById("time-current");
+const totalTime = document.getElementById("time-total");
 
-    function format(time){
+const volume = document.getElementById("volume");
 
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
 
-        return `${minutes}:${seconds.toString().padStart(2,"0")}`;
+
+
+let currentTrack = 0;
+
+
+
+function formatTime(seconds) {
+
+    if (isNaN(seconds)) return "0:00";
+
+    let min = Math.floor(seconds / 60);
+
+    let sec = Math.floor(seconds % 60);
+
+    if (sec < 10) sec = "0" + sec;
+
+    return `${min}:${sec}`;
+
+}
+
+
+
+
+function loadTrack(index) {
+
+
+    const track = tracks[index];
+
+
+    currentTrack = index;
+
+
+    audio.src = track.dataset.src;
+
+
+    title.textContent = track.dataset.title;
+
+    info.textContent = track.dataset.info;
+
+
+    tracks.forEach(t => {
+
+        t.classList.remove("active");
+
+    });
+
+
+    track.classList.add("active");
+
+
+}
+
+
+
+
+
+function playTrack() {
+
+
+    audio.play();
+
+
+    mainPlay.innerHTML =
+    '<i class="fas fa-pause"></i>';
+
+
+}
+
+
+
+
+function pauseTrack(){
+
+
+    audio.pause();
+
+
+    mainPlay.innerHTML =
+    '<i class="fas fa-play"></i>';
+
+
+}
+
+
+
+
+tracks.forEach((track,index)=>{
+
+
+    const button = track.querySelector(".play-btn");
+
+
+
+    button.addEventListener("click",(e)=>{
+
+
+        e.stopPropagation();
+
+
+
+        if(currentTrack !== index){
+
+
+            loadTrack(index);
+
+            playTrack();
+
+
+        }
+
+        else{
+
+
+            if(audio.paused){
+
+                playTrack();
+
+            }
+
+            else{
+
+                pauseTrack();
+
+            }
+
+
+        }
+
+
+
+    });
+
+
+
+    track.addEventListener("click",()=>{
+
+
+        loadTrack(index);
+
+        playTrack();
+
+
+    });
+
+
+
+});
+
+
+
+
+
+
+mainPlay.addEventListener("click",()=>{
+
+
+    if(!audio.src){
+
+        loadTrack(0);
 
     }
 
-    audio.addEventListener("loadedmetadata",()=>{
 
-        duration.textContent = format(audio.duration);
 
-    });
+    if(audio.paused){
 
-    button.addEventListener("click",()=>{
+        playTrack();
 
-        if(currentAudio && currentAudio !== audio){
+    }
 
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
+    else{
 
-            currentButton
-                .querySelector("i")
-                .className = "fas fa-play";
+        pauseTrack();
 
-        }
+    }
 
-        if(audio.paused){
 
-            audio.play();
 
-            icon.className = "fas fa-pause";
+});
 
-            currentAudio = audio;
-            currentButton = button;
 
-        }else{
 
-            audio.pause();
 
-            icon.className = "fas fa-play";
 
-        }
 
-    });
 
-    audio.addEventListener("timeupdate",()=>{
+audio.addEventListener("timeupdate",()=>{
 
-        current.textContent = format(audio.currentTime);
 
-        progress.value =
-            (audio.currentTime / audio.duration) * 100 || 0;
+    if(audio.duration){
 
-    });
 
-    progress.addEventListener("input",()=>{
+        seek.value =
+        (audio.currentTime / audio.duration) * 100;
+
+
+        currentTime.textContent =
+        formatTime(audio.currentTime);
+
+
+        totalTime.textContent =
+        formatTime(audio.duration);
+
+
+    }
+
+
+});
+
+
+
+
+
+
+
+seek.addEventListener("input",()=>{
+
+
+    if(audio.duration){
+
 
         audio.currentTime =
-            (progress.value / 100) * audio.duration;
+        (seek.value / 100) * audio.duration;
 
-    });
 
-    audio.addEventListener("ended",()=>{
+    }
 
-        progress.value = 0;
 
-        current.textContent = "0:00";
+});
 
-        icon.className = "fas fa-play";
 
-    });
+
+
+
+
+
+volume.addEventListener("input",()=>{
+
+
+    audio.volume = volume.value;
+
+
+});
+
+
+
+audio.volume = 0.8;
+
+
+
+
+
+
+
+next.addEventListener("click",()=>{
+
+
+    currentTrack++;
+
+
+    if(currentTrack >= tracks.length){
+
+        currentTrack = 0;
+
+    }
+
+
+    loadTrack(currentTrack);
+
+    playTrack();
+
+
+});
+
+
+
+
+
+
+
+prev.addEventListener("click",()=>{
+
+
+    currentTrack--;
+
+
+    if(currentTrack < 0){
+
+        currentTrack = tracks.length - 1;
+
+    }
+
+
+    loadTrack(currentTrack);
+
+    playTrack();
+
+
+});
+
+
+
+
+
+
+
+
+audio.addEventListener("ended",()=>{
+
+
+    next.click();
+
 
 });
