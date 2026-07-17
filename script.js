@@ -105,54 +105,12 @@ function pauseTrack(){
 
 tracks.forEach((track,index)=>{
 
-
     const button = track.querySelector(".play-btn");
-
 
 
     button.addEventListener("click",(e)=>{
 
-
-        e.stopPropagation();
-
-
-
-        if(currentTrack !== index){
-
-
-            loadTrack(index);
-
-            playTrack();
-
-
-        }
-
-        else{
-
-
-            if(audio.paused){
-
-                playTrack();
-
-            }
-
-            else{
-
-                pauseTrack();
-
-            }
-
-
-        }
-
-
-
-    });
-
-
-
-    track.addEventListener("click",()=>{
-
+        e.preventDefault();
 
         loadTrack(index);
 
@@ -162,9 +120,16 @@ tracks.forEach((track,index)=>{
     });
 
 
+    track.addEventListener("click",()=>{
+
+        loadTrack(index);
+
+        playTrack();
+
+    });
+
 
 });
-
 
 
 
