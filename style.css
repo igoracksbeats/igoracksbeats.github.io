@@ -395,7 +395,7 @@ header {
 
 .waveform {
 
-    height:50px;
+    height:30px;
 
     display:flex;
 
@@ -403,7 +403,7 @@ header {
 
     gap:3px;
 
-    margin-top:25px;
+    margin-top:30px;
 
     opacity:.6;
 
