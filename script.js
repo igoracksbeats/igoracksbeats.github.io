@@ -24,15 +24,38 @@ function formatTime(seconds) {
 
     if (isNaN(seconds)) return "0:00";
 
-    const minutes = Math.floor(seconds / 60);
+    let min = Math.floor(seconds / 60);
 
-    let secondsLeft = Math.floor(seconds % 60);
+    let sec = Math.floor(seconds % 60);
 
-    if (secondsLeft < 10) {
-        secondsLeft = "0" + secondsLeft;
+    if (sec < 10) {
+        sec = "0" + sec;
     }
 
-    return `${minutes}:${secondsLeft}`;
+    return `${min}:${sec}`;
+
+}
+
+
+
+
+function resetTracks(){
+
+    tracks.forEach(track=>{
+
+        track.classList.remove("active");
+        track.classList.remove("playing");
+
+
+        const icon = track.querySelector(".play-btn i");
+
+        if(icon){
+
+            icon.className = "fas fa-play";
+
+        }
+
+    });
 
 }
 
@@ -40,29 +63,24 @@ function formatTime(seconds) {
 
 
 
-function loadTrack(index) {
+function loadTrack(index){
+
 
     const track = tracks[index];
 
+
     currentTrack = index;
 
+
     audio.src = track.dataset.src;
+
 
     title.textContent = track.dataset.title;
 
     info.textContent = track.dataset.info;
 
 
-    tracks.forEach(item => {
-        item.classList.remove("active");
-
-        const icon = item.querySelector(".play-btn i");
-
-        if(icon){
-            icon.className = "fas fa-play";
-        }
-
-    });
+    resetTracks();
 
 
     track.classList.add("active");
@@ -75,21 +93,35 @@ function loadTrack(index) {
 
 
 
-function playTrack() {
+
+function playTrack(){
+
 
     audio.play();
+
 
     mainPlay.innerHTML =
     '<i class="fas fa-pause"></i>';
 
 
-    const activeButton =
-    tracks[currentTrack].querySelector(".play-btn i");
+
+    const track = tracks[currentTrack];
 
 
-    if(activeButton){
-        activeButton.className = "fas fa-pause";
+    track.classList.add("playing");
+
+
+    const icon =
+    track.querySelector(".play-btn i");
+
+
+    if(icon){
+
+        icon.className =
+        "fas fa-pause";
+
     }
+
 
 }
 
@@ -98,23 +130,37 @@ function playTrack() {
 
 
 
-function pauseTrack() {
+function pauseTrack(){
+
 
     audio.pause();
+
 
     mainPlay.innerHTML =
     '<i class="fas fa-play"></i>';
 
 
-    const activeButton =
-    tracks[currentTrack].querySelector(".play-btn i");
+
+    const track = tracks[currentTrack];
 
 
-    if(activeButton){
-        activeButton.className = "fas fa-play";
+    track.classList.remove("playing");
+
+
+    const icon =
+    track.querySelector(".play-btn i");
+
+
+    if(icon){
+
+        icon.className =
+        "fas fa-play";
+
     }
 
+
 }
+
 
 
 
@@ -124,13 +170,16 @@ function pauseTrack() {
 tracks.forEach((track,index)=>{
 
 
-    const button = track.querySelector(".play-btn");
+    const button =
+    track.querySelector(".play-btn");
 
 
-    button.addEventListener("click",(event)=>{
+
+    button.addEventListener("click",(e)=>{
 
 
-        event.stopPropagation();
+        e.stopPropagation();
+
 
 
         if(currentTrack !== index || !audio.src){
@@ -141,18 +190,21 @@ tracks.forEach((track,index)=>{
             playTrack();
 
 
-        } else {
+        } 
+        else {
 
 
             if(audio.paused){
 
                 playTrack();
 
-            } else {
+            }
+            else{
 
                 pauseTrack();
 
             }
+
 
         }
 
@@ -162,13 +214,34 @@ tracks.forEach((track,index)=>{
 
 
 
-
     track.addEventListener("click",()=>{
 
 
-        loadTrack(index);
+        if(currentTrack !== index || !audio.src){
 
-        playTrack();
+
+            loadTrack(index);
+
+            playTrack();
+
+
+        }
+        else{
+
+
+            if(audio.paused){
+
+                playTrack();
+
+            }
+            else{
+
+                pauseTrack();
+
+            }
+
+
+        }
 
 
     });
@@ -176,6 +249,7 @@ tracks.forEach((track,index)=>{
 
 
 });
+
 
 
 
@@ -194,11 +268,13 @@ mainPlay.addEventListener("click",()=>{
     }
 
 
+
     if(audio.paused){
 
         playTrack();
 
-    } else {
+    }
+    else{
 
         pauseTrack();
 
@@ -206,6 +282,7 @@ mainPlay.addEventListener("click",()=>{
 
 
 });
+
 
 
 
