@@ -12,7 +12,6 @@ const seek = document.getElementById("seek");
 const currentTime = document.getElementById("time-current");
 const totalTime = document.getElementById("time-total");
 
-const volume = document.getElementById("volume");
 
 const prev = document.getElementById("prev");
 const next = document.getElementById("next");
@@ -218,17 +217,13 @@ seek.addEventListener("input",()=>{
 
 
 
-volume.addEventListener("input",()=>{
-
-
-    audio.volume = volume.value;
 
 
 });
 
 
 
-audio.volume = 0.8;
+
 
 
 
