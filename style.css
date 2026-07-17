@@ -286,9 +286,9 @@ header {
 
 .waveform {
 
-    width:180px;
+    width:280px;
 
-    height:25px;
+    height:10px;
 
     margin-left:30px;
 
@@ -314,7 +314,7 @@ header {
 
 .waveform span:nth-child(2n) {
 
-    height:16px;
+    height:15px;
 
 }
 
