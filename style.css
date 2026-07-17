@@ -106,7 +106,7 @@ header {
 
     color:#888;
 
-    font-size:18px;
+    font-size:35px;
 
     transition:.2s;
 
@@ -177,7 +177,7 @@ header {
 
     color:#444;
 
-    font-size:13px;
+    font-size:12px;
 
 }
 
@@ -199,7 +199,7 @@ header {
 
 .beat h2 {
 
-    font-size:18px;
+    font-size:12px;
 
     font-weight:600;
 
@@ -211,7 +211,7 @@ header {
 
     color:#777;
 
-    font-size:13px;
+    font-size:12px;
 
 }
 
@@ -237,7 +237,7 @@ header {
 
     border-radius:20px;
 
-    font-size:11px;
+    font-size:9px;
 
     color:#999;
 
@@ -250,9 +250,9 @@ header {
 
 .play-btn {
 
-    width:42px;
+    width:43px;
 
-    height:42px;
+    height:43px;
 
     border-radius:50%;
 
@@ -288,7 +288,7 @@ header {
 
 .waveform {
 
-    height:35px;
+    height:25px;
 
     margin:
 
@@ -374,7 +374,7 @@ header {
 
 #current-title {
 
-    font-size:15px;
+    font-size:16px;
 
     font-weight:600;
 
@@ -386,7 +386,7 @@ header {
 
     color:#777;
 
-    font-size:13px;
+    font-size:12px;
 
 }
 
@@ -491,7 +491,7 @@ footer a {
 
     text-decoration:none;
 
-    font-size:13px;
+    font-size:12px;
 
 }
 
