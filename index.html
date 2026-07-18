@@ -13,195 +13,236 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
-
 <body>
-
 
 <div class="noise"></div>
 
+<header>
 
-<header id="top">
+<h1>IgoRacks</h1>
 
-
-<a href="#top" class="logo">
-IgoRacks
-</a>
-
-
-<p class="subtitle">
+<p>
 Hip-Hop Producer · Artist · Mix Engineer
 </p>
 
-
 <div class="socials">
-
 
 <a href="https://open.spotify.com/artist/74ZzK035XeXN4eh4vNsLd8?si=PR6vhwCAR2qcg_WGzQOjGQ">
 <i class="fab fa-spotify"></i>
 </a>
 
-
 <a href="https://www.youtube.com/@igoracksbeats">
 <i class="fab fa-youtube"></i>
 </a>
-
 
 <a href="https://instagram.com/igoracksbeats">
 <i class="fab fa-instagram"></i>
 </a>
 
-
 <a href="https://t.me/igoracks">
 <i class="fab fa-telegram"></i>
 </a>
 
-
-<a href="https://wa.me/79996351902?text=Let's work!">
+<a href="https://wa.me/79996351902">
 <i class="fab fa-whatsapp"></i>
 </a>
 
-
 </div>
-
 
 </header>
-<section class="beats">
-<div class="beat"
-data-title="Undeterred"
-data-info="136 BPM • C Minor"
-data-src="audio/undeterred.mp3">
-<div class="beat-number">
-01
-</div>
-<div class="beat-content">
-<div class="beat-info">
-<div>
-<h2>Undeterred</h2>
-<span>
-136 BPM • C Minor
-</span>
-<div class="tags">
-<span>Dark Trap</span>
-<span>Nervous</span>
-<span>Orchestral</span>
-</div>
-</div>
-<button class="play-btn">
-<i class="fas fa-play"></i>
-</button>
-</div>
-<div class="waveform">
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-</div>
-</div>
-</div>
-</section>
 
-<div class="beat"
-data-title="Goat Bell"
-data-info="143 BPM • C Minor"
-data-src="audio/goatbell.mp3">
-<div class="beat-number">
-02
+<main class="playlist">
+
+<!-- TRACK -->
+
+<div class="track"
+
+data-src="audio/undeterred.mp3"
+
+data-title="Undeterred"
+
+data-info="136 BPM • C Minor">
+
+<div class="track-number">
+
+01
+
 </div>
-<div class="beat-content">
-<div class="beat-info">
-<div>
-<h2>Goat Bell</h2>
-<span>
-143 BPM • C Minor
-</span>
-<div class="tags">
-<span>Dark Trap</span>
-<span>Nervous</span>
-<span>Orchestral</span>
-</div>
-</div>
-<button class="play-btn">
+
+<button class="track-play">
+
 <i class="fas fa-play"></i>
+
 </button>
+
+<div class="track-details">
+
+<h2>
+
+Undeterred
+
+</h2>
+
+<p>
+
+136 BPM • C Minor
+
+</p>
+
+<div class="track-tags">
+
+<span>Dark Trap</span>
+
+<span>Nervous</span>
+
+<span>Orchestral</span>
+
 </div>
-<div class="waveform">
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
+
 </div>
+
+<div class="track-wave">
+
+<div class="wave"></div>
+
 </div>
+
 </div>
-</section>
+
+<!-- TRACK -->
+
+<div class="track"
+
+data-src="audio/goat-bell.mp3"
+
+data-title="Goat Bell"
+
+data-info="143 BPM • C Minor">
+
+<div class="track-number">
+
+02
+
+</div>
+
+<button class="track-play">
+
+<i class="fas fa-play"></i>
+
+</button>
+
+<div class="track-details">
+
+<h2>
+
+Goat Bell
+
+</h2>
+
+<p>
+
+143 BPM • C Minor
+
+</p>
+
+<div class="track-tags">
+
+<span>Dark Trap</span>
+
+<span>West Coast</span>
+
+<span>Cinematic</span>
+
+</div>
+
+</div>
+
+<div class="track-wave">
+
+<div class="wave"></div>
+
+</div>
+
+</div>
+
+</main>
 
 <div class="player">
-<div class="player-title">
-<span id="current-title">
+
+<div class="player-left">
+
+<div id="player-title">
+
 Select beat
-</span>
-<span id="current-info">
-</span>
+
 </div>
-<div class="controls">
+
+<div id="player-info">
+
+—
+
+</div>
+
+</div>
+
+<div class="player-center">
+
 <button id="prev">
+
 <i class="fas fa-backward"></i>
+
 </button>
-<button id="main-play">
+
+<button id="play">
+
 <i class="fas fa-play"></i>
+
 </button>
+
 <button id="next">
+
 <i class="fas fa-forward"></i>
+
 </button>
+
 </div>
-<div class="timeline">
-<span id="time-current">
+
+<div class="player-right">
+
+<span id="current">
+
 0:00
+
 </span>
-<input id="seek"
+
+<input
+id="seek"
 type="range"
 min="0"
 max="100"
 value="0">
-<span id="time-total">
+
+<span id="duration">
+
 0:00
+
 </span>
+
 </div>
+
 </div>
+
 <audio id="audio"></audio>
-<footer>
-<a href="#top">
-© IgoRacks 2026
-</a>
-</footer>
+
 <script src="script.js"></script>
+
 </body>
+
 </html>
