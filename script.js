@@ -27,7 +27,7 @@ let currentIndex = 0;
 
 document.querySelectorAll(".wave").forEach(wave=>{
 
-    for(let i=0;i<90;i++){
+    for(let i=0;i<35;i++){
 
         const bar=document.createElement("span");
 
