@@ -1,600 +1,275 @@
+/* ==========================================
+   ELEMENTS
+========================================== */
+
 const audio = document.getElementById("audio");
 
-const tracks = document.querySelectorAll(".beat");
+const tracks = [...document.querySelectorAll(".track")];
 
-const mainPlay = document.getElementById("main-play");
+const playButton = document.getElementById("play");
 
-const title = document.getElementById("current-title");
-const info = document.getElementById("current-info");
+const prevButton = document.getElementById("prev");
+
+const nextButton = document.getElementById("next");
 
 const seek = document.getElementById("seek");
 
-const currentTime = document.getElementById("time-current");
-const totalTime = document.getElementById("time-total");
+const currentTime = document.getElementById("current");
 
-const prev = document.getElementById("prev");
-const next = document.getElementById("next");
+const durationTime = document.getElementById("duration");
 
+const playerTitle = document.getElementById("player-title");
 
-let currentTrack = 0;
+const playerInfo = document.getElementById("player-info");
 
-
-// AUDIO VISUALIZER
-
-let audioContext;
-let analyser;
-let source;
-let dataArray;
-let visualizerStarted = false;
+let currentIndex = -1;
 
 
+/* ==========================================
+   CREATE WAVEFORMS
+========================================== */
 
-function formatTime(seconds) {
+document.querySelectorAll(".wave").forEach(wave => {
 
-    if (isNaN(seconds)) return "0:00";
-
-    let min = Math.floor(seconds / 60);
-
-    let sec = Math.floor(seconds % 60);
-
-    if (sec < 10) {
-        sec = "0" + sec;
-    }
-
-    return `${min}:${sec}`;
-
-}
-
-
-
-
-
-function createVisualizer(){
-
-
-    const waveform =
-    document.querySelector(".waveform");
-
-
-    if(!waveform) return;
-
-
-    waveform.innerHTML = "";
-
-
-    for(let i = 0; i < 32; i++){
+    for (let i = 0; i < 90; i++) {
 
         const bar = document.createElement("span");
 
-        waveform.appendChild(bar);
+        const h = 4 + Math.random() * 18;
+
+        bar.style.height = `${h}px`;
+
+        wave.appendChild(bar);
 
     }
-
-}
-
-
-
-
-
-function startVisualizer(){
-
-
-    if(visualizerStarted){
-
-        audioContext.resume();
-
-        return;
-
-    }
-
-
-    audioContext =
-    new AudioContext();
-
-
-    analyser =
-    audioContext.createAnalyser();
-
-
-    source =
-    audioContext.createMediaElementSource(audio);
-
-
-    source.connect(analyser);
-
-
-    analyser.connect(
-        audioContext.destination
-    );
-
-
-    analyser.fftSize = 64;
-
-
-    dataArray =
-    new Uint8Array(
-        analyser.frequencyBinCount
-    );
-
-
-    createVisualizer();
-
-
-    visualizerStarted = true;
-
-
-    animateVisualizer();
-
-
-}
-
-
-
-
-
-function animateVisualizer(){
-
-
-    requestAnimationFrame(
-        animateVisualizer
-    );
-
-
-    if(!analyser) return;
-
-
-    analyser.getByteFrequencyData(
-        dataArray
-    );
-
-
-    const bars =
-    document.querySelectorAll(
-        ".waveform span"
-    );
-
-
-    bars.forEach((bar,index)=>{
-
-
-        let value =
-        dataArray[index] || 0;
-
-
-        let height =
-        Math.max(
-            5,
-            value / 2
-        );
-
-
-        bar.style.height =
-        height + "px";
-
-
-    });
-
-
-}
-
-
-
-
-
-
-
-function resetTracks(){
-
-
-    tracks.forEach(track=>{
-
-
-        track.classList.remove("active");
-
-        track.classList.remove("playing");
-
-
-        const icon =
-        track.querySelector(".play-btn i");
-
-
-        if(icon){
-
-            icon.className =
-            "fas fa-play";
-
-        }
-
-
-    });
-
-
-}
-
-
-
-
-
-
-
-function loadTrack(index){
-
-
-    const track =
-    tracks[index];
-
-
-    currentTrack = index;
-
-
-    audio.src =
-    track.dataset.src;
-
-
-    title.textContent =
-    track.dataset.title;
-
-
-    info.textContent =
-    track.dataset.info;
-
-
-
-    resetTracks();
-
-
-    track.classList.add("active");
-
-
-}
-
-
-
-
-
-
-
-function playTrack(){
-
-
-    startVisualizer();
-
-
-    audio.play();
-
-
-
-    mainPlay.innerHTML =
-    '<i class="fas fa-pause">';
-
-
-
-    const track =
-    tracks[currentTrack];
-
-
-    track.classList.add("playing");
-
-
-
-    const icon =
-    track.querySelector(".play-btn i");
-
-
-    if(icon){
-
-        icon.className =
-        "fas fa-pause";
-
-    }
-
-
-}
-
-
-
-
-
-
-
-function pauseTrack(){
-
-
-    audio.pause();
-
-
-    mainPlay.innerHTML =
-    '<i class="fas fa-play"></i>';
-
-
-
-    const track =
-    tracks[currentTrack];
-
-
-    track.classList.remove("playing");
-
-
-
-    const icon =
-    track.querySelector(".play-btn i");
-
-
-    if(icon){
-
-        icon.className =
-        "fas fa-play";
-
-    }
-
-
-}
-
-
-
-
-
-
-
-
-tracks.forEach((track,index)=>{
-
-
-    const button =
-    track.querySelector(".play-btn");
-
-
-
-    button.addEventListener(
-    "click",
-    (e)=>{
-
-
-        e.stopPropagation();
-
-
-
-        if(currentTrack !== index || !audio.src){
-
-
-            loadTrack(index);
-
-            playTrack();
-
-
-        }
-
-        else{
-
-
-            if(audio.paused){
-
-                playTrack();
-
-            }
-
-            else{
-
-                pauseTrack();
-
-            }
-
-
-        }
-
-
-    });
-
-
-
-
-
-
-    track.addEventListener(
-    "click",
-    ()=>{
-
-
-        if(currentTrack !== index || !audio.src){
-
-
-            loadTrack(index);
-
-            playTrack();
-
-
-        }
-
-        else{
-
-
-            if(audio.paused){
-
-                playTrack();
-
-            }
-
-            else{
-
-                pauseTrack();
-
-            }
-
-
-        }
-
-
-    });
-
 
 });
 
 
+/* ==========================================
+   FORMAT TIME
+========================================== */
+
+function formatTime(seconds){
+
+    if(isNaN(seconds)) return "0:00";
+
+    const m = Math.floor(seconds / 60);
+
+    const s = Math.floor(seconds % 60);
+
+    return `${m}:${String(s).padStart(2,"0")}`;
+
+}
 
 
+/* ==========================================
+   LOAD TRACK
+========================================== */
+
+function loadTrack(index){
+
+    currentIndex = index;
+
+    const track = tracks[index];
+
+    audio.src = track.dataset.src;
+
+    playerTitle.textContent = track.dataset.title;
+
+    playerInfo.textContent = track.dataset.info;
+
+    tracks.forEach(t=>t.classList.remove("active"));
+
+    track.classList.add("active");
+
+}
 
 
+/* ==========================================
+   CLICK TRACK
+========================================== */
+
+tracks.forEach((track,index)=>{
+
+    const btn = track.querySelector(".track-play");
+
+    btn.addEventListener("click",()=>{
+
+        if(currentIndex!==index){
+
+            loadTrack(index);
+
+        }
+
+        audio.play();
+
+    });
+
+});
+
+/* ==========================================
+   PLAY / PAUSE
+========================================== */
+
+function updatePlayButtons(isPlaying){
+
+    tracks.forEach(track=>{
+
+        const icon = track.querySelector(".track-play i");
+
+        icon.className = "fas fa-play";
+
+    });
+
+    if(currentIndex >= 0){
+
+        const icon = tracks[currentIndex].querySelector(".track-play i");
+
+        icon.className = isPlaying
+            ? "fas fa-pause"
+            : "fas fa-play";
+
+    }
+
+    playButton.innerHTML = isPlaying
+        ? '<i class="fas fa-pause"></i>'
+        : '<i class="fas fa-play"></i>';
+
+}
 
 
-mainPlay.addEventListener(
-"click",
-()=>{
+playButton.addEventListener("click",()=>{
 
-
-    if(!audio.src){
+    if(currentIndex === -1){
 
         loadTrack(0);
 
     }
 
-
-
     if(audio.paused){
 
-        playTrack();
+        audio.play();
+
+    }else{
+
+        audio.pause();
 
     }
-
-    else{
-
-        pauseTrack();
-
-    }
-
 
 });
 
 
+audio.addEventListener("play",()=>{
+
+    updatePlayButtons(true);
+
+});
 
 
+audio.addEventListener("pause",()=>{
+
+    updatePlayButtons(false);
+
+});
 
 
+/* ==========================================
+   PREVIOUS / NEXT
+========================================== */
+
+prevButton.addEventListener("click",()=>{
+
+    if(tracks.length===0) return;
+
+    if(currentIndex<=0){
+
+        loadTrack(tracks.length-1);
+
+    }else{
+
+        loadTrack(currentIndex-1);
+
+    }
+
+    audio.play();
+
+});
 
 
+nextButton.addEventListener("click",()=>{
 
-audio.addEventListener(
-"timeupdate",
-()=>{
+    if(tracks.length===0) return;
+
+    if(currentIndex>=tracks.length-1){
+
+        loadTrack(0);
+
+    }else{
+
+        loadTrack(currentIndex+1);
+
+    }
+
+    audio.play();
+
+});
 
 
-    if(audio.duration){
+audio.addEventListener("ended",()=>{
+
+    nextButton.click();
+
+});
 
 
-        seek.value =
-        (audio.currentTime / audio.duration) * 100;
+/* ==========================================
+   TIME
+========================================== */
 
+audio.addEventListener("loadedmetadata",()=>{
 
-
-        currentTime.textContent =
-        formatTime(audio.currentTime);
-
-
-
-        totalTime.textContent =
+    durationTime.textContent =
         formatTime(audio.duration);
 
-
-    }
-
-
 });
 
 
+audio.addEventListener("timeupdate",()=>{
 
-
-
-
-
-
-seek.addEventListener(
-"input",
-()=>{
-
+    currentTime.textContent =
+        formatTime(audio.currentTime);
 
     if(audio.duration){
 
-
-        audio.currentTime =
-        (seek.value / 100) * audio.duration;
-
+        seek.value =
+            (audio.currentTime/audio.duration)*100;
 
     }
 
+});
+
+
+/* ==========================================
+   SEEK
+========================================== */
+
+seek.addEventListener("input",()=>{
+
+    if(!audio.duration) return;
+
+    audio.currentTime =
+        (seek.value/100)*audio.duration;
 
 });
 
 
+/* ==========================================
+   START
+========================================== */
 
+if(tracks.length){
 
+    loadTrack(0);
 
-
-
-
-next.addEventListener(
-"click",
-()=>{
-
-
-    currentTrack++;
-
-
-    if(currentTrack >= tracks.length){
-
-        currentTrack = 0;
-
-    }
-
-
-    loadTrack(currentTrack);
-
-    playTrack();
-
-
-});
-
-
-
-
-
-
-
-
-prev.addEventListener(
-"click",
-()=>{
-
-
-    currentTrack--;
-
-
-    if(currentTrack < 0){
-
-        currentTrack =
-        tracks.length - 1;
-
-    }
-
-
-    loadTrack(currentTrack);
-
-    playTrack();
-
-
-});
-
-
-
-
-
-
-
-
-audio.addEventListener(
-"ended",
-()=>{
-
-
-    next.click();
-
-
-});
+}
