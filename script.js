@@ -7,37 +7,33 @@ const audio = document.getElementById("audio");
 const tracks = [...document.querySelectorAll(".track")];
 
 const playButton = document.getElementById("play");
-
 const prevButton = document.getElementById("prev");
-
 const nextButton = document.getElementById("next");
 
 const seek = document.getElementById("seek");
 
 const currentTime = document.getElementById("current");
-
 const durationTime = document.getElementById("duration");
 
 const playerTitle = document.getElementById("player-title");
-
 const playerInfo = document.getElementById("player-info");
 
-let currentIndex = -1;
+let currentIndex = 0;
 
 
 /* ==========================================
-   CREATE WAVEFORMS
+   CREATE WAVES
 ========================================== */
 
-document.querySelectorAll(".wave").forEach(wave => {
+document.querySelectorAll(".wave").forEach(wave=>{
 
-    for (let i = 0; i < 90; i++) {
+    for(let i=0;i<90;i++){
 
-        const bar = document.createElement("span");
+        const bar=document.createElement("span");
 
-        const h = 4 + Math.random() * 18;
+        bar.style.height=(4+Math.random()*18)+"px";
 
-        bar.style.height = `${h}px`;
+        bar.style.animationDelay=(Math.random()*0.5)+"s";
 
         wave.appendChild(bar);
 
@@ -45,18 +41,45 @@ document.querySelectorAll(".wave").forEach(wave => {
 
 });
 
+const bars=document.querySelectorAll(".wave span");
+
 
 /* ==========================================
-   FORMAT TIME
+   WAVE
 ========================================== */
 
-function formatTime(seconds){
+function startWave(){
 
-    if(isNaN(seconds)) return "0:00";
+    bars.forEach(bar=>{
 
-    const m = Math.floor(seconds / 60);
+        bar.style.animationPlayState="running";
 
-    const s = Math.floor(seconds % 60);
+    });
+
+}
+
+function stopWave(){
+
+    bars.forEach(bar=>{
+
+        bar.style.animationPlayState="paused";
+
+    });
+
+}
+
+
+/* ==========================================
+   TIME
+========================================== */
+
+function formatTime(sec){
+
+    if(isNaN(sec)) return "0:00";
+
+    const m=Math.floor(sec/60);
+
+    const s=Math.floor(sec%60);
 
     return `${m}:${String(s).padStart(2,"0")}`;
 
@@ -69,79 +92,95 @@ function formatTime(seconds){
 
 function loadTrack(index){
 
-    currentIndex = index;
+    currentIndex=index;
 
-    const track = tracks[index];
+    const track=tracks[index];
 
-    audio.src = track.dataset.src;
+    audio.src=track.dataset.src;
 
-    playerTitle.textContent = track.dataset.title;
+    playerTitle.textContent=track.dataset.title;
 
-    playerInfo.textContent = track.dataset.info;
+    playerInfo.textContent=track.dataset.info;
 
     tracks.forEach(t=>t.classList.remove("active"));
 
     track.classList.add("active");
 
+    updatePlayButtons(false);
+
 }
 
 
 /* ==========================================
-   CLICK TRACK
-========================================== */
-
-tracks.forEach((track,index)=>{
-
-    const btn = track.querySelector(".track-play");
-
-    btn.addEventListener("click",()=>{
-
-        if(currentIndex!==index){
-
-            loadTrack(index);
-
-        }
-
-        audio.play();
-
-    });
-
-});
-
-/* ==========================================
-   PLAY / PAUSE
+   BUTTONS
 ========================================== */
 
 function updatePlayButtons(isPlaying){
 
     tracks.forEach(track=>{
 
-        const icon = track.querySelector(".track-play i");
-
-        icon.className = "fas fa-play";
+        track.querySelector(".track-play i").className="fas fa-play";
 
     });
 
-    if(currentIndex >= 0){
+    if(tracks[currentIndex]){
 
-        const icon = tracks[currentIndex].querySelector(".track-play i");
-
-        icon.className = isPlaying
+        tracks[currentIndex]
+            .querySelector(".track-play i")
+            .className=isPlaying
             ? "fas fa-pause"
             : "fas fa-play";
 
     }
 
-    playButton.innerHTML = isPlaying
+    playButton.innerHTML=isPlaying
         ? '<i class="fas fa-pause"></i>'
         : '<i class="fas fa-play"></i>';
 
 }
 
 
+/* ==========================================
+   TRACK CLICK
+========================================== */
+
+tracks.forEach((track,index)=>{
+
+    track.querySelector(".track-play")
+    .addEventListener("click",()=>{
+
+        if(currentIndex!==index){
+
+            loadTrack(index);
+
+            audio.play();
+
+            return;
+
+        }
+
+        if(audio.paused){
+
+            audio.play();
+
+        }else{
+
+            audio.pause();
+
+        }
+
+    });
+
+});
+
+
+/* ==========================================
+   MAIN PLAY
+========================================== */
+
 playButton.addEventListener("click",()=>{
 
-    if(currentIndex === -1){
+    if(!audio.src){
 
         loadTrack(0);
 
@@ -160,90 +199,107 @@ playButton.addEventListener("click",()=>{
 });
 
 
+/* ==========================================
+   PREVIOUS
+========================================== */
+
+prevButton.addEventListener("click",()=>{
+
+    currentIndex--;
+
+    if(currentIndex<0){
+
+        currentIndex=tracks.length-1;
+
+    }
+
+    loadTrack(currentIndex);
+
+    audio.play();
+
+});
+
+
+/* ==========================================
+   NEXT
+========================================== */
+
+nextButton.addEventListener("click",()=>{
+
+    currentIndex++;
+
+    if(currentIndex>=tracks.length){
+
+        currentIndex=0;
+
+    }
+
+    loadTrack(currentIndex);
+
+    audio.play();
+
+});
+/* ==========================================
+   AUDIO EVENTS
+========================================== */
+
 audio.addEventListener("play",()=>{
 
     updatePlayButtons(true);
 
-});
+    startWave();
 
+});
 
 audio.addEventListener("pause",()=>{
 
     updatePlayButtons(false);
 
-});
-
-
-/* ==========================================
-   PREVIOUS / NEXT
-========================================== */
-
-prevButton.addEventListener("click",()=>{
-
-    if(tracks.length===0) return;
-
-    if(currentIndex<=0){
-
-        loadTrack(tracks.length-1);
-
-    }else{
-
-        loadTrack(currentIndex-1);
-
-    }
-
-    audio.play();
+    stopWave();
 
 });
-
-
-nextButton.addEventListener("click",()=>{
-
-    if(tracks.length===0) return;
-
-    if(currentIndex>=tracks.length-1){
-
-        loadTrack(0);
-
-    }else{
-
-        loadTrack(currentIndex+1);
-
-    }
-
-    audio.play();
-
-});
-
 
 audio.addEventListener("ended",()=>{
 
-    nextButton.click();
+    stopWave();
+
+    currentIndex++;
+
+    if(currentIndex>=tracks.length){
+
+        currentIndex=0;
+
+    }
+
+    loadTrack(currentIndex);
+
+    audio.play();
 
 });
 
 
 /* ==========================================
-   TIME
+   METADATA
 ========================================== */
 
 audio.addEventListener("loadedmetadata",()=>{
 
-    durationTime.textContent =
-        formatTime(audio.duration);
+    durationTime.textContent=formatTime(audio.duration);
 
 });
 
 
+/* ==========================================
+   PROGRESS
+========================================== */
+
 audio.addEventListener("timeupdate",()=>{
 
-    currentTime.textContent =
-        formatTime(audio.currentTime);
+    currentTime.textContent=formatTime(audio.currentTime);
 
     if(audio.duration){
 
-        seek.value =
-            (audio.currentTime/audio.duration)*100;
+        seek.value=(audio.currentTime/audio.duration)*100;
 
     }
 
@@ -258,8 +314,24 @@ seek.addEventListener("input",()=>{
 
     if(!audio.duration) return;
 
-    audio.currentTime =
-        (seek.value/100)*audio.duration;
+    audio.currentTime=(seek.value/100)*audio.duration;
+
+});
+
+
+/* ==========================================
+   KEYBOARD
+========================================== */
+
+document.addEventListener("keydown",e=>{
+
+    if(e.code==="Space"){
+
+        e.preventDefault();
+
+        playButton.click();
+
+    }
 
 });
 
@@ -273,3 +345,5 @@ if(tracks.length){
     loadTrack(0);
 
 }
+
+stopWave();
