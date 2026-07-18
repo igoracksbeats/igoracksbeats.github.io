@@ -402,9 +402,11 @@ header p{
 
     border-radius:2px;
 
-    min-height:3px;
+    height:8px;
 
-    transition:.15s;
+    animation:equalizer .8s ease-in-out infinite;
+
+    animation-play-state:paused;
 
 }
 
@@ -948,3 +950,30 @@ input:focus{
 /* ==========================================
    END
 ========================================== */
+@keyframes equalizer{
+
+    0%{
+        height:4px;
+    }
+
+    20%{
+        height:20px;
+    }
+
+    40%{
+        height:8px;
+    }
+
+    60%{
+        height:22px;
+    }
+
+    80%{
+        height:10px;
+    }
+
+    100%{
+        height:4px;
+    }
+
+}
