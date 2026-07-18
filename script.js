@@ -50,20 +50,22 @@ const bars=document.querySelectorAll(".wave span");
 
 function startWave(){
 
-    bars.forEach(bar=>{
+    document.querySelectorAll(".wave span").forEach(bar=>{
+        bar.style.animationPlayState = "paused";
+    });
 
-        bar.style.animationPlayState="running";
+    const activeWave = tracks[currentIndex].querySelectorAll(".wave span");
 
+    activeWave.forEach(bar=>{
+        bar.style.animationPlayState = "running";
     });
 
 }
 
 function stopWave(){
 
-    bars.forEach(bar=>{
-
-        bar.style.animationPlayState="paused";
-
+    document.querySelectorAll(".wave span").forEach(bar=>{
+        bar.style.animationPlayState = "paused";
     });
 
 }
