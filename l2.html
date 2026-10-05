@@ -1,0 +1,326 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>IgoRacks</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+/* LIMITER CALCULATOR */
+
+.calculator-wrapper {
+    max-width: 720px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.calculator {
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 32px;
+    background: rgba(255,255,255,0.03);
+}
+
+.calculator h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.calculator-description {
+    margin: 0 0 28px;
+    opacity: 0.55;
+    font-size: 14px;
+}
+
+.bpm-input {
+    width: 100%;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04);
+    color: inherit;
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: 700;
+    outline: none;
+    margin-bottom: 24px;
+}
+
+.bpm-input:focus {
+    border-color: rgba(255,255,255,0.45);
+}
+
+.limiter-results {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.limiter-box {
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    padding: 20px 10px;
+    text-align: center;
+    background: rgba(255,255,255,0.025);
+}
+
+.limiter-name {
+    font-size: 11px;
+    opacity: 0.5;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.limiter-value {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.limiter-unit {
+    font-size: 11px;
+    opacity: 0.45;
+    margin-top: 7px;
+}
+
+.limiter-pattern {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 12px;
+    opacity: 0.4;
+}
+
+@media (max-width: 600px) {
+
+    .calculator-wrapper {
+        margin: 50px auto;
+    }
+
+    .calculator {
+        padding: 22px;
+    }
+
+    .limiter-results {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="noise"></div>
+
+
+<header>
+
+<a href="index.html">
+<h1>IgoRacks</h1>
+</a>
+
+<p>
+Artist · Hip-Hop Producer · Mix Engineer
+</p>
+
+
+<div class="socials">
+
+<a href="https://open.spotify.com/artist/74ZzK035XeXN4eh4vNsLd8?si=PR6vhwCAR2qcg_WGzQOjGQ"
+target="_blank">
+
+<i class="fab fa-spotify"></i>
+
+</a>
+
+
+<a href="https://www.youtube.com/@igoracksbeats"
+target="_blank">
+
+<i class="fab fa-youtube"></i>
+
+</a>
+
+
+<a href="https://instagram.com/igoracksbeats"
+target="_blank">
+
+<i class="fab fa-instagram"></i>
+
+</a>
+
+
+<a href="https://t.me/igoracks"
+target="_blank">
+
+<i class="fab fa-telegram"></i>
+
+</a>
+
+
+<a href="https://wa.me/79996351902"
+target="_blank">
+
+<i class="fab fa-whatsapp"></i>
+
+</a>
+
+</div>
+
+</header>
+
+
+<main class="calculator-wrapper">
+
+<div class="calculator">
+
+<h2>Limiter Release Calculator</h2>
+
+<p class="calculator-description">
+Enter BPM to calculate release times for a three-stage limiter chain.
+</p>
+
+
+<input
+class="bpm-input"
+id="bpm"
+type="number"
+value="138"
+min="20"
+max="400"
+step="1"
+placeholder="BPM"
+oninput="calculateRelease()"
+>
+
+
+<div class="limiter-results">
+
+
+<div class="limiter-box">
+
+<div class="limiter-name">
+WAVES L2 #1
+</div>
+
+<div class="limiter-value" id="limiter1">
+109
+</div>
+
+<div class="limiter-unit">
+ms
+</div>
+
+</div>
+
+
+<div class="limiter-box">
+
+<div class="limiter-name">
+WAVES L2 #2
+</div>
+
+<div class="limiter-value" id="limiter2">
+163
+</div>
+
+<div class="limiter-unit">
+ms
+</div>
+
+</div>
+
+
+<div class="limiter-box">
+
+<div class="limiter-name">
+FABFILTER PRO-L
+</div>
+
+<div class="limiter-value" id="limiter3">
+72
+</div>
+
+<div class="limiter-unit">
+ms
+</div>
+
+</div>
+
+
+</div>
+
+
+<div class="limiter-pattern">
+
+1/16 → dotted 1/16 → 1/16 triplet<br>
+Fast → Slow → Fast
+
+</div>
+
+
+</div>
+
+</main>
+
+
+<script>
+
+function calculateRelease() {
+
+    const bpm = parseFloat(
+        document.getElementById("bpm").value
+    );
+
+    if (!bpm || bpm <= 0) {
+        return;
+    }
+
+    const quarterNote = 60000 / bpm;
+
+    const limiter1 = quarterNote / 4;
+
+    const limiter2 = limiter1 * 1.5;
+
+    const limiter3 = quarterNote / 6;
+
+
+    document.getElementById("limiter1").textContent =
+        Math.round(limiter1);
+
+    document.getElementById("limiter2").textContent =
+        Math.round(limiter2);
+
+    document.getElementById("limiter3").textContent =
+        Math.round(limiter3);
+
+}
+
+calculateRelease();
+
+</script>
+
+
+</body>
+
+</html>
+```
