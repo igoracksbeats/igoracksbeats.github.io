@@ -1,351 +1,834 @@
-/* ==========================================
-   ELEMENTS
-========================================== */
+const audio =
+  document.getElementById("audio");
 
-const audio = document.getElementById("audio");
+const tracks =
+  Array.from(
+    document.querySelectorAll(".track")
+  );
 
-const tracks = [...document.querySelectorAll(".track")];
+const playButton =
+  document.getElementById("play");
 
-const playButton = document.getElementById("play");
-const prevButton = document.getElementById("prev");
-const nextButton = document.getElementById("next");
+const prevButton =
+  document.getElementById("prev");
 
-const seek = document.getElementById("seek");
+const nextButton =
+  document.getElementById("next");
 
-const currentTime = document.getElementById("current");
-const durationTime = document.getElementById("duration");
+const seek =
+  document.getElementById("seek");
 
-const playerTitle = document.getElementById("player-title");
-const playerInfo = document.getElementById("player-info");
+const currentTime =
+  document.getElementById("current");
 
-let currentIndex = 0;
+const duration =
+  document.getElementById("duration");
+
+const playerTitle =
+  document.getElementById("player-title");
+
+const playerInfo =
+  document.getElementById("player-info");
 
 
-/* ==========================================
-   CREATE WAVES
-========================================== */
+let currentTrackIndex = -1;
 
-document.querySelectorAll(".wave").forEach(wave=>{
 
-    for(let i=0;i<35;i++){
+/* =========================================
+   FORMAT TIME
+========================================= */
 
-        const bar=document.createElement("span");
+function formatTime(seconds) {
 
-        bar.style.height=(4+Math.random()*18)+"px";
+  if (
+    !Number.isFinite(seconds)
+  ) {
+    return "0:00";
+  }
 
-        bar.style.animationDelay=(Math.random()*0.5)+"s";
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
 
-        wave.appendChild(bar);
+  const secs =
+    Math.floor(
+      seconds % 60
+    );
+
+  return (
+    minutes +
+    ":" +
+    secs
+      .toString()
+      .padStart(2, "0")
+  );
+
+}
+
+
+/* =========================================
+   GENERATE MINI WAVEFORMS
+========================================= */
+
+document
+  .querySelectorAll(".wave")
+  .forEach(
+    (wave, waveIndex) => {
+
+      wave.innerHTML = "";
+
+      const bars = 44;
+
+      for (
+        let i = 0;
+        i < bars;
+        i++
+      ) {
+
+        const bar =
+          document.createElement("span");
+
+        bar.className =
+          "wave-bar";
+
+        const value =
+          (
+            (
+              i * 17 +
+              waveIndex * 13
+            ) %
+            28
+          ) +
+          7;
+
+        bar.style.height =
+          `${value}px`;
+
+        wave.appendChild(
+          bar
+        );
+
+      }
 
     }
-
-});
-
-const bars=document.querySelectorAll(".wave span");
+  );
 
 
-/* ==========================================
-   WAVE
-========================================== */
+/* =========================================
+   ADD DOWNLOAD DEMO BUTTONS
+========================================= */
 
-function startWave(){
+tracks.forEach(
+  (track, index) => {
 
-    document.querySelectorAll(".wave span").forEach(bar=>{
-        bar.style.animationPlayState = "paused";
-    });
+    const src =
+      track.dataset.src;
 
-    const activeWave = tracks[currentIndex].querySelectorAll(".wave span");
+    const title =
+      track.dataset.title ||
+      `beat-${index + 1}`;
 
-    activeWave.forEach(bar=>{
-        bar.style.animationPlayState = "running";
-    });
+    const button =
+      document.createElement(
+        "button"
+      );
 
-}
+    button.className =
+      "download-demo";
 
-function stopWave(){
-
-    document.querySelectorAll(".wave span").forEach(bar=>{
-        bar.style.animationPlayState = "paused";
-    });
-
-}
-
-
-/* ==========================================
-   TIME
-========================================== */
-
-function formatTime(sec){
-
-    if(isNaN(sec)) return "0:00";
-
-    const m=Math.floor(sec/60);
-
-    const s=Math.floor(sec%60);
-
-    return `${m}:${String(s).padStart(2,"0")}`;
-
-}
+    button.innerHTML =
+      `
+      <i class="fas fa-download"></i>
+      <span>DOWNLOAD DEMO</span>
+      `;
 
 
-/* ==========================================
+    button.addEventListener(
+      "click",
+      async (event) => {
+
+        event.stopPropagation();
+
+        if (!src) {
+          return;
+        }
+
+
+        button.classList.add(
+          "downloading"
+        );
+
+        const label =
+          button.querySelector("span");
+
+        const originalText =
+          label.textContent;
+
+        label.textContent =
+          "DOWNLOADING";
+
+
+        try {
+
+          const response =
+            await fetch(src);
+
+          if (!response.ok) {
+            throw new Error(
+              "Download failed"
+            );
+          }
+
+
+          const blob =
+            await response.blob();
+
+          const objectURL =
+            URL.createObjectURL(
+              blob
+            );
+
+
+          const anchor =
+            document.createElement("a");
+
+          anchor.href =
+            objectURL;
+
+
+          const safeTitle =
+            title
+              .toLowerCase()
+              .replace(
+                /[^a-z0-9а-яё]+/gi,
+                "-"
+              )
+              .replace(
+                /^-+|-+$/g,
+                ""
+              );
+
+
+          anchor.download =
+            `${safeTitle}-demo.mp3`;
+
+          document.body.appendChild(
+            anchor
+          );
+
+          anchor.click();
+
+          anchor.remove();
+
+
+          setTimeout(
+            () => {
+
+              URL.revokeObjectURL(
+                objectURL
+              );
+
+            },
+            1000
+          );
+
+
+          label.textContent =
+            "DOWNLOADED";
+
+
+          setTimeout(
+            () => {
+
+              label.textContent =
+                originalText;
+
+            },
+            1300
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          /*
+          Fallback:
+          if browser refuses fetch download,
+          open the original MP3.
+          */
+
+          const anchor =
+            document.createElement("a");
+
+          anchor.href =
+            src;
+
+          anchor.download = "";
+
+          document.body.appendChild(
+            anchor
+          );
+
+          anchor.click();
+
+          anchor.remove();
+
+
+          label.textContent =
+            originalText;
+
+        }
+
+        finally {
+
+          button.classList.remove(
+            "downloading"
+          );
+
+        }
+
+      }
+    );
+
+
+    track.appendChild(
+      button
+    );
+
+  }
+);
+
+
+/* =========================================
    LOAD TRACK
-========================================== */
+========================================= */
 
-function loadTrack(index){
+function loadTrack(
+  index,
+  autoplay = true
+) {
 
-    currentIndex=index;
-
-    const track=tracks[index];
-
-    audio.src=track.dataset.src;
-
-    playerTitle.textContent=track.dataset.title;
-
-    playerInfo.textContent=track.dataset.info;
-
-    tracks.forEach(t=>t.classList.remove("active"));
-
-    track.classList.add("active");
-
-    updatePlayButtons(false);
-
-}
+  if (
+    index < 0 ||
+    index >= tracks.length
+  ) {
+    return;
+  }
 
 
-/* ==========================================
-   BUTTONS
-========================================== */
+  currentTrackIndex =
+    index;
 
-function updatePlayButtons(isPlaying){
 
-    tracks.forEach(track=>{
+  const track =
+    tracks[index];
 
-        track.querySelector(".track-play i").className="fas fa-play";
+  const src =
+    track.dataset.src;
 
-    });
+  const title =
+    track.dataset.title ||
+    "Untitled";
 
-    if(tracks[currentIndex]){
+  const info =
+    track.dataset.info ||
+    "";
 
-        tracks[currentIndex]
-            .querySelector(".track-play i")
-            .className=isPlaying
+
+  audio.src =
+    src;
+
+
+  playerTitle.textContent =
+    title;
+
+  playerInfo.textContent =
+    info;
+
+
+  tracks.forEach(
+    (item, itemIndex) => {
+
+      item.classList.toggle(
+        "active",
+        itemIndex === index
+      );
+
+
+      const icon =
+        item.querySelector(
+          ".track-play i"
+        );
+
+
+      if (icon) {
+
+        icon.className =
+          itemIndex === index &&
+          autoplay
             ? "fas fa-pause"
             : "fas fa-play";
 
-    }
+      }
 
-    playButton.innerHTML=isPlaying
-        ? '<i class="fas fa-pause"></i>'
-        : '<i class="fas fa-play"></i>';
+    }
+  );
+
+
+  if (autoplay) {
+
+    audio
+      .play()
+      .catch(
+        error => {
+
+          console.log(
+            "Playback blocked:",
+            error
+          );
+
+        }
+      );
+
+  }
+
+
+  updatePlayIcons();
 
 }
 
 
-/* ==========================================
-   TRACK CLICK
-========================================== */
+/* =========================================
+   PLAY / PAUSE
+========================================= */
 
-tracks.forEach((track,index)=>{
+function togglePlay() {
 
-    track.querySelector(".track-play")
-    .addEventListener("click",()=>{
+  if (
+    currentTrackIndex === -1
+  ) {
 
-        if(currentIndex!==index){
+    loadTrack(
+      0,
+      true
+    );
 
-            loadTrack(index);
-
-            audio.play();
-
-            return;
-
-        }
-
-        if(audio.paused){
-
-            audio.play();
-
-        }else{
-
-            audio.pause();
-
-        }
-
-    });
-
-});
+    return;
+  }
 
 
-/* ==========================================
-   MAIN PLAY
-========================================== */
-
-playButton.addEventListener("click",()=>{
-
-    if(!audio.src){
-
-        loadTrack(0);
-
-    }
-
-    if(audio.paused){
-
-        audio.play();
-
-    }else{
-
-        audio.pause();
-
-    }
-
-});
-
-
-/* ==========================================
-   PREVIOUS
-========================================== */
-
-prevButton.addEventListener("click",()=>{
-
-    currentIndex--;
-
-    if(currentIndex<0){
-
-        currentIndex=tracks.length-1;
-
-    }
-
-    loadTrack(currentIndex);
+  if (
+    audio.paused
+  ) {
 
     audio.play();
 
-});
+  }
+
+  else {
+
+    audio.pause();
+
+  }
+
+}
 
 
-/* ==========================================
-   NEXT
-========================================== */
+/* =========================================
+   ICON STATES
+========================================= */
 
-nextButton.addEventListener("click",()=>{
+function updatePlayIcons() {
 
-    currentIndex++;
+  const isPlaying =
+    !audio.paused;
 
-    if(currentIndex>=tracks.length){
 
-        currentIndex=0;
+  if (playButton) {
+
+    const icon =
+      playButton.querySelector(
+        "i"
+      );
+
+
+    if (icon) {
+
+      icon.className =
+        isPlaying
+          ? "fas fa-pause"
+          : "fas fa-play";
 
     }
 
-    loadTrack(currentIndex);
+  }
 
-    audio.play();
 
-});
-/* ==========================================
+  tracks.forEach(
+    (track, index) => {
+
+      const icon =
+        track.querySelector(
+          ".track-play i"
+        );
+
+
+      if (!icon) {
+        return;
+      }
+
+
+      if (
+        index ===
+          currentTrackIndex &&
+        isPlaying
+      ) {
+
+        icon.className =
+          "fas fa-pause";
+
+      }
+
+      else {
+
+        icon.className =
+          "fas fa-play";
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   TRACK BUTTON EVENTS
+========================================= */
+
+tracks.forEach(
+  (track, index) => {
+
+    const button =
+      track.querySelector(
+        ".track-play"
+      );
+
+
+    if (!button) {
+      return;
+    }
+
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if (
+          index ===
+          currentTrackIndex
+        ) {
+
+          togglePlay();
+
+        }
+
+        else {
+
+          loadTrack(
+            index,
+            true
+          );
+
+        }
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================
+   MAIN CONTROLS
+========================================= */
+
+playButton?.addEventListener(
+  "click",
+  togglePlay
+);
+
+
+prevButton?.addEventListener(
+  "click",
+  () => {
+
+    if (!tracks.length) {
+      return;
+    }
+
+
+    let nextIndex =
+      currentTrackIndex - 1;
+
+
+    if (
+      nextIndex < 0
+    ) {
+
+      nextIndex =
+        tracks.length - 1;
+
+    }
+
+
+    loadTrack(
+      nextIndex,
+      true
+    );
+
+  }
+);
+
+
+nextButton?.addEventListener(
+  "click",
+  () => {
+
+    if (!tracks.length) {
+      return;
+    }
+
+
+    let nextIndex =
+      currentTrackIndex + 1;
+
+
+    if (
+      nextIndex >=
+      tracks.length
+    ) {
+
+      nextIndex = 0;
+
+    }
+
+
+    loadTrack(
+      nextIndex,
+      true
+    );
+
+  }
+);
+
+
+/* =========================================
    AUDIO EVENTS
-========================================== */
+========================================= */
 
-audio.addEventListener("play",()=>{
-
-    updatePlayButtons(true);
-
-    startWave();
-
-});
-
-audio.addEventListener("pause",()=>{
-
-    updatePlayButtons(false);
-
-    stopWave();
-
-});
-
-audio.addEventListener("ended",()=>{
-
-    stopWave();
-
-    currentIndex++;
-
-    if(currentIndex>=tracks.length){
-
-        currentIndex=0;
-
-    }
-
-    loadTrack(currentIndex);
-
-    audio.play();
-
-});
+audio.addEventListener(
+  "play",
+  updatePlayIcons
+);
 
 
-/* ==========================================
-   METADATA
-========================================== */
-
-audio.addEventListener("loadedmetadata",()=>{
-
-    durationTime.textContent=formatTime(audio.duration);
-
-});
+audio.addEventListener(
+  "pause",
+  updatePlayIcons
+);
 
 
-/* ==========================================
-   PROGRESS
-========================================== */
+audio.addEventListener(
+  "loadedmetadata",
+  () => {
 
-audio.addEventListener("timeupdate",()=>{
+    duration.textContent =
+      formatTime(
+        audio.duration
+      );
 
-    currentTime.textContent=formatTime(audio.currentTime);
+  }
+);
 
-    if(audio.duration){
 
-        seek.value=(audio.currentTime/audio.duration)*100;
+audio.addEventListener(
+  "timeupdate",
+  () => {
+
+    currentTime.textContent =
+      formatTime(
+        audio.currentTime
+      );
+
+
+    if (
+      Number.isFinite(
+        audio.duration
+      ) &&
+      audio.duration > 0
+    ) {
+
+      seek.value =
+        (
+          audio.currentTime /
+          audio.duration
+        ) *
+        100;
 
     }
 
-});
+  }
+);
 
 
-/* ==========================================
+/* NEXT TRACK AUTOMATICALLY */
+
+audio.addEventListener(
+  "ended",
+  () => {
+
+    if (!tracks.length) {
+      return;
+    }
+
+
+    let nextIndex =
+      currentTrackIndex + 1;
+
+
+    if (
+      nextIndex >=
+      tracks.length
+    ) {
+
+      nextIndex = 0;
+
+    }
+
+
+    loadTrack(
+      nextIndex,
+      true
+    );
+
+  }
+);
+
+
+/* =========================================
    SEEK
-========================================== */
+========================================= */
 
-seek.addEventListener("input",()=>{
+seek.addEventListener(
+  "input",
+  () => {
 
-    if(!audio.duration) return;
-
-    audio.currentTime=(seek.value/100)*audio.duration;
-
-});
-
-
-/* ==========================================
-   KEYBOARD
-========================================== */
-
-document.addEventListener("keydown",e=>{
-
-    if(e.code==="Space"){
-
-        e.preventDefault();
-
-        playButton.click();
-
+    if (
+      !Number.isFinite(
+        audio.duration
+      )
+    ) {
+      return;
     }
 
-});
+
+    audio.currentTime =
+      (
+        seek.value /
+        100
+      ) *
+      audio.duration;
+
+  }
+);
 
 
-/* ==========================================
-   START
-========================================== */
+/* =========================================
+   3D HEADER TITLE
+========================================= */
 
-if(tracks.length){
+const title =
+  document.querySelector(
+    "header h1"
+  );
 
-    loadTrack(0);
+
+if (title) {
+
+  title.addEventListener(
+    "pointermove",
+    event => {
+
+      const rect =
+        title.getBoundingClientRect();
+
+
+      const x =
+        (
+          event.clientX -
+          rect.left
+        ) /
+        rect.width;
+
+
+      const y =
+        (
+          event.clientY -
+          rect.top
+        ) /
+        rect.height;
+
+
+      const rotateY =
+        (
+          x -
+          0.5
+        ) *
+        10;
+
+
+      const rotateX =
+        (
+          0.5 -
+          y
+        ) *
+        8;
+
+
+      title.style.transform =
+        `
+        perspective(800px)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+        translateZ(28px)
+        scale(1.02)
+        `;
+
+    }
+  );
+
+
+  title.addEventListener(
+    "pointerleave",
+    () => {
+
+      title.style.transform =
+        `
+        perspective(800px)
+        rotateX(0deg)
+        rotateY(0deg)
+        translateZ(0)
+        scale(1)
+        `;
+
+    }
+  );
 
 }
-
-stopWave();
