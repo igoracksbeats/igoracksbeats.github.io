@@ -1058,3 +1058,70 @@ header > p::after {
   }
 
 }
+
+/* BEAT CATEGORIES */
+
+.beat-section-heading {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 2px;
+
+  border-bottom: 1px solid var(--line);
+
+  margin-top: 16px;
+}
+
+.beat-section-heading > div {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.beat-section-heading span {
+  font-family: "Oswald", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.beat-section-heading small {
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  color: #666662;
+  letter-spacing: .1em;
+}
+
+.beat-section-heading b {
+  font-family: "Space Mono", monospace;
+  font-size: 8px;
+  font-weight: 400;
+  color: var(--red);
+
+  border: 1px solid var(--line);
+
+  padding: 5px 8px;
+}
+
+.archive-heading {
+  margin-top: 40px;
+}
+
+@media(max-width: 480px) {
+
+  .beat-section-heading {
+    min-height: 50px;
+  }
+
+  .beat-section-heading span {
+    font-size: 15px;
+  }
+
+  .beat-section-heading small {
+    display: none;
+  }
+
+}
